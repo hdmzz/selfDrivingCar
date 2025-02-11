@@ -11,7 +11,6 @@ class	Roads {
 	borders: {x: number, y:number}[][]
     
     /**
-     * 
      * @param x est le canvas width / 2, ou le milieu du canvas
      * @param width est le canvas widht * 0.9 ou 90% de la largeur du canvas
      * @param laneCount le lanecount est le nombre de voies sur la route
@@ -43,10 +42,10 @@ class	Roads {
 	getLaneCenter(laneIndex: number)
 	{
 		const laneWidth = this.width / this.laneCount;
-		return this.left + laneWidth/2 + Math.min(laneIndex, this.laneCount-1)*laneWidth;
+		return this.left + laneWidth/2 + Math.min(laneIndex, this.laneCount - 1) * laneWidth;
 	};
-    /**
-     * 
+
+    /** 
      * @param ctx le context du canvas 2d
      * @function lerp donne une valeur entre 2 autres valeurs
      * ici elle est utilisée pour trouver 

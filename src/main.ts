@@ -10,7 +10,7 @@ if (ctx === null) {
 	alert("No context here!");
 } else {
 	const	road = new Roads(canvas.width / 2, canvas.width * 0.9);
-	const	car = new Car(road.getLaneCenter(1), 100, 30, 50);
+	const	car = new Car(road.getLaneCenter(3), 100, 30, 50);
 	animate();
 	function animate() {
 		car.update();
