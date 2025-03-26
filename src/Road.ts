@@ -28,10 +28,10 @@ class	Roads {
 		this.top = -infinity;
 		this.bottom = infinity;
 
-		const	topLeft = {x:this.left,y:this.top};
-		const	topRight = {x:this.right,y:this.top};
-		const	bottomLeft = {x:this.left,y:this.bottom};
-		const	bottomRight = {x:this.right,y:this.bottom};
+		const	topLeft = {x: this.left, y: this.top};
+		const	topRight = {x: this.right, y: this.top};
+		const	bottomLeft = {x: this.left, y: this.bottom};
+		const	bottomRight = {x: this.right, y: this.bottom};
 
 		this.borders = [
 			[topLeft,bottomLeft],
@@ -62,7 +62,7 @@ class	Roads {
 				i / this.laneCount,
 			);
 
-			ctx.setLineDash([20,20]);
+			ctx.setLineDash([20, 20]);//premiere valeur longeur du trait, deuxieme valeur
 			ctx.beginPath();
 			ctx.moveTo(x,this.top);
 			ctx.lineTo(x,this.bottom);

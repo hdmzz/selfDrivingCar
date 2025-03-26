@@ -13,7 +13,7 @@ if (ctx === null) {
 	const	car = new Car(road.getLaneCenter(3), 100, 30, 50);
 	animate();
 	function animate() {
-		car.update();
+		car.update(road.borders);
 		canvas.height = window.innerHeight;
 		ctx?.save();
 		ctx?.translate(0, -car.y + canvas.height * 0.7);

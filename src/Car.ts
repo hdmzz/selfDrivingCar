@@ -1,16 +1,18 @@
 import Controls from "./Controls";
+import Sensor from "./Sensor";
 
 class	Car {
 	x: number;
 	y: number;
 	width: number;
 	height: number;
-	controls: Controls;
 	speed: number;
 	acceleration: number;
 	friction: number;
 	angle: number;
 	maxSpeed: number;
+	controls: Controls;
+    sensor: Sensor;
 
 	constructor(x: number, y: number, width: number, height: number)
 	{
@@ -25,11 +27,13 @@ class	Car {
 		this.angle = 0;;
 
 		this.controls = new Controls();
+        this.sensor = new Sensor(this);
 	};
 
-	update()
+	update(roadBorders: {x: number, y:number}[][])
 	{
 		this.#move();
+        this.sensor.update(roadBorders);
 	};
 
 	#move()
@@ -85,8 +89,12 @@ class	Car {
 			this.width,
 			this.height
 		);
+
 		ctx.fill();
+
 		ctx.restore();
+
+        this.sensor.draw(ctx);
 	};
 };
 
