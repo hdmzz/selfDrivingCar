@@ -1,5 +1,7 @@
 import Car from "./Car";
 import Roads from "./Road";
+import Sensor from "./Sensor";
+
 
 const	canvas = document.getElementById("myCanvas") as HTMLCanvasElement;
 
@@ -15,6 +17,7 @@ if (ctx === null) {
 	function animate() {
 		car.update(road.borders);
 		canvas.height = window.innerHeight;
+
 		ctx?.save();
 		ctx?.translate(0, -car.y + canvas.height * 0.7);
 
