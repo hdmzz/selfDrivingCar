@@ -10,13 +10,13 @@ class	Roads {
 	bottom: number;
 	borders: {x: number, y:number}[][]
     
-    /**
-     * @param x est le canvas width / 2, ou le milieu du canvas
-     * @param width est le canvas widht * 0.9 ou 90% de la largeur du canvas
-     * @param laneCount le lanecount est le nombre de voies sur la route
-     */
-	constructor(x: number, width: number, laneCount: number = 4)
-    {
+  /**
+   * @param x est le canvas width / 2, ou le milieu du canvas
+   * @param width est le canvas widht * 0.9 ou 90% de la largeur du canvas
+   * @param laneCount le lanecount est le nombre de voies sur la route
+   */
+  constructor(x: number, width: number, laneCount: number = 4) 
+  {
 		this.x = x;
 		this.width = width;
 		this.laneCount = laneCount;//nombre de voies
@@ -42,14 +42,14 @@ class	Roads {
 	getLaneCenter(laneIndex: number)
 	{
 		const laneWidth = this.width / this.laneCount;
-		return this.left + laneWidth/2 + Math.min(laneIndex, this.laneCount - 1) * laneWidth;
+		return (this.left + laneWidth/2 + Math.min(laneIndex, this.laneCount - 1) * laneWidth);
 	};
 
-    /** 
-     * @param ctx le context du canvas 2d
-     * @function lerp donne une valeur entre 2 autres valeurs
-     * ici elle est utilisée pour trouver 
-     */
+  /** 
+   * @param ctx le context du canvas 2d
+   * @function lerp donne une valeur entre 2 autres valeurs
+   * ici elle est utilisée pour trouver 
+   */
 	draw(ctx: CanvasRenderingContext2D)
 	{
 		ctx.lineWidth=5;
@@ -70,7 +70,7 @@ class	Roads {
 		}
 
 		ctx.setLineDash([]);
-		this.borders.forEach(border=>{
+		this.borders.forEach(border => {
 			ctx.beginPath();
 			ctx.moveTo(border[0].x,border[0].y);
 			ctx.lineTo(border[1].x,border[1].y);

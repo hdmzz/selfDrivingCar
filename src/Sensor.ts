@@ -1,56 +1,101 @@
 import Car from "./Car";
-import { lerp } from "./Utils";
+import { getIntersection, lerp } from "./Utils";
 
 class Sensor {
-    car: Car;
-    rayCount: number;
-    rayLenght: number;
-    raySpread: number;
-    rays: [{x: number, y: number}, {x: number, y: number}][];
+  car: Car;
+  rayCount: number;
+  rayLenght: number;
+  raySpread: number;
+  rays: [{x: number, y: number}, {x: number, y: number}][];
+  readings: any[];
 
-    constructor(car: Car) {
-        this.car = car;
-        this.rayCount = 4;
-        this.rayLenght = 150;
-        this.raySpread = Math.PI/2;
-        this.rays = [];
+  constructor(car: Car) {
+    this.car = car;
+    this.rayCount = 10;
+    this.rayLenght = 150;
+    this.raySpread = Math.PI/2;//90deg en radian
+    this.rays = [];
+    this.readings = [];
+  };
+
+  update(roadBorders: {x: number, y:number}[][])
+  {
+    //dabord definir les rayons
+    this.#castRays();
+    this.readings = [];
+    for (let i = 0; i < this.rayCount; i++) {
+      this.readings.push(
+        this.#getReadings(this.rays[i], roadBorders)
+      );
+    };
+  };
+
+  #getReadings(ray: [{x: number, y: number}, {x: number, y: number}] ,roadBorders: {x: number, y:number}[][])
+  {
+    let touches = [];
+    for (let i = 0; i < roadBorders.length; i++) {
+      const touch = getIntersection(
+        ray[0],
+        ray[1],
+        roadBorders[i][0],
+        roadBorders[i][1]
+      )
+      if (touch) {
+        touches.push(touch);
+      };
     };
 
-    update(roadBorders: {x: number, y:number}[][])
-    {
-        //dabord definir les rayons
-        this.#castRays();
-
-        console.log(this.rays);
+    if (touches.length == 0) {
+      return null;
+    } else {
+      const offset = touches.map(e => e.offset);
+      const minOffset = Math.min(...offset);
+      return touches.find(e => e.offset == minOffset);
     };
+  };
 
-    #getReadings(ray: [number, number] ,roadBorders: {x: number, y:number}[][])
-    {
-        return 0;
+  #castRays()
+  {
+    this.rays = [];
+
+    for (let i = 0; i < this.rayCount; i++) {
+      //pour chaque rayon, il faut definir l'angle de départ et l'angle d'arrivée si le nombre de rayon est egal à 1 alors il faut que l'angle de départ 
+      const rayAngle = lerp(this.raySpread / 2, -this.raySpread / 2, this.rayCount == 1 ? 0.5 : i / (this.rayCount - 1)) + this.car.angle;
+      const start = {x: this.car.x, y: this.car.y};
+      const end = {
+        x: this.car.x - (Math.sin(rayAngle) * this.rayLenght),//Il faut penser à la trigonométrie avec le cercle et les valeur des angles en radian pi/2, pi/4, pi/3...
+        y: this.car.y - (Math.cos(rayAngle) * this.rayLenght)//et les,valeurs de sin et cos en fonction de l'angle pour trouver les coordonnées des points
+        //le point de fin du rayon est donc le point de départ MOINS la valeur de sin ou cos en fonction de l'angle, MOINS car le rayon est tracé vers le haut de l'écran
+        //PLUS orienterai le rayon vers le bas de l'écran
+      };
+
+      this.rays.push([start, end]);
     };
+  };
 
-    #castRays()
-    {
-        this.rays = [];
+  draw(ctx: CanvasRenderingContext2D)
+  {
+    //ray structure [start, end]
+    for (let i = 0; i < this.rayCount; i++) {
+      let end = this.rays[i][1];
+      if (this.readings[i]) {
+        end = this.readings[i];
+      }
+      ctx.beginPath();
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = "yellow";
+      ctx.moveTo(this.rays[i][0].x, this.rays[i][0].y);
+      ctx.lineTo(end.x, end.y);
+      ctx.stroke();
 
-        for (let i = 0; i < this.rayCount; i++) {
-            const rayAngle = lerp(this.raySpread / 2, -this.raySpread / 2, this.rayCount == 1 ? 0.5 : i / (this.rayCount - 1)) + this.car.angle;
-            const start = {x: this.car.x, y: this.car.y};
-            const end = {
-                x: this.car.x - (Math.sin(rayAngle) * this.rayLenght),
-                y: this.car.y - (Math.cos(rayAngle) * this.rayLenght)
-            };
-
-            this.rays.push([start, end]);
-        };
-
+      ctx.beginPath();
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = "black";
+      ctx.moveTo(this.rays[i][1].x, this.rays[i][1].y);
+      ctx.lineTo(end.x, end.y);
+      ctx.stroke();
     };
-
-    draw(ctx: CanvasRenderingContext2D)
-    {
-        return 0;
-    };
-
+  }
 };
 
 export default Sensor;
