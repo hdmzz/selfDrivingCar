@@ -2,7 +2,7 @@ import Controls from "./Controls";
 import Sensor from "./Sensor";
 import { getIntersection, polysIntersect } from "./Utils";
 
-class	Car {
+export class	Car {
 	x: number;
 	y: number;
 	width: number;
@@ -150,5 +150,3 @@ class	Car {
     };
 	};
 };
-
-export default Car;

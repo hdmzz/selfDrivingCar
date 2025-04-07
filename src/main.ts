@@ -1,4 +1,4 @@
-import Car from "./Car";
+import {Car} from "./Car";
 import Roads from "./Road";
 import Sensor from "./Sensor";
 
