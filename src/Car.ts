@@ -13,11 +13,12 @@ class	Car {
 	angle: number;
 	maxSpeed: number;
 	controls: Controls;
-  sensor: Sensor;
+  sensor: Sensor | null = null;
   polygon: {x: number, y: number}[];
   damaged: boolean;
 
-	constructor(x: number, y: number, width: number, height: number)
+
+	constructor(x: number, y: number, width: number, height: number, controlType: string, maxspeed: number = 3)
 	{
 		this.x = x
 		this.y = y;
@@ -25,14 +26,16 @@ class	Car {
 		this.height = height;
 		this.speed = 0;
 		this.acceleration = 0.2;
-		this.maxSpeed = 3;
+		this.maxSpeed = maxspeed;
 		this.friction= 0.05;
 		this.angle = 0;;
     this.polygon = [];
     this.damaged = false;
 
-		this.controls = new Controls();
-    this.sensor = new Sensor(this);
+		this.controls = new Controls(controlType);
+    if (controlType != "DUMMY") {
+      this.sensor = new Sensor(this);
+    }
     this.createPolygon();
 	};
 
@@ -64,25 +67,32 @@ class	Car {
     return points;
   }
 
-	update(roadBorders: {x: number, y:number}[][])
+	update(roadBorders: {x: number, y:number}[][], traffic: Car[])
 	{
     if (!this.damaged) {
       this.#move();
       this.polygon = this.createPolygon();
-      this.damaged = this.#assessDamage(roadBorders);
+      this.damaged = this.#assessDamage(roadBorders, traffic);
     };
-    this.sensor.update(roadBorders);
+    if (this.sensor) {
+      this.sensor.update(roadBorders, traffic);
+    };
 	};
 
-  #assessDamage(roadBorders: {x: number, y:number}[][])
+  #assessDamage(roadBorders: {x: number, y:number}[][], traffic: Car[])
   {
     for (let i = 0; i < roadBorders.length; i++) {
       if (polysIntersect(this.polygon, roadBorders[i])) {
         return true;
       };
     };
+    for (let i = 0; i < traffic.length; i++) {
+      if (polysIntersect(this.polygon, traffic[i].polygon)) {
+        return true;
+      };
+    };
     return false;
-  }
+  };
 
 	#move()
 	{
@@ -126,16 +136,18 @@ class	Car {
 		this.y -= Math.cos(this.angle) * this.speed;
 	}
 
-	draw(ctx: CanvasRenderingContext2D)
+	draw(ctx: CanvasRenderingContext2D, color: string = "blue")
 	{
-    ctx.fillStyle = this.damaged ? "red" : "black";
+    ctx.fillStyle = this.damaged ? "gray" : color;
     ctx.beginPath();
     ctx.moveTo(this.polygon[0].x, this.polygon[0].y);
     for (let i = 1; i < this.polygon.length; i++) {
       ctx.lineTo(this.polygon[i].x, this.polygon[i].y);
     }
     ctx.fill();
-    this.sensor.draw(ctx);
+    if (this.sensor) {
+      this.sensor.draw(ctx);
+    };
 	};
 };
 

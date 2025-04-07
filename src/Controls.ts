@@ -5,14 +5,21 @@ class	Controls
 	left: boolean;
 	right: boolean;
 
-	constructor()
+	constructor(controlType: string)
 	{
 		this.forward = false;
 		this.reverse = false;
 		this.right = false;
 		this.left = false;
 
-		this.#addKeyBoardListener();
+    switch (controlType) {
+			case "KEYS":
+				this.#addKeyBoardListener();
+				break;
+			case "DUMMY":
+				this.forward = true;
+				break;
+		};
 	};
 
 /**

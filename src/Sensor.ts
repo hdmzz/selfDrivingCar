@@ -18,19 +18,18 @@ class Sensor {
     this.readings = [];
   };
 
-  update(roadBorders: {x: number, y:number}[][])
+  update(roadBorders: {x: number, y:number}[][], traffic: Car[])
   {
-    //dabord definir les rayons
     this.#castRays();
     this.readings = [];
     for (let i = 0; i < this.rayCount; i++) {
       this.readings.push(
-        this.#getReadings(this.rays[i], roadBorders)
+        this.#getReadings(this.rays[i], roadBorders, traffic)
       );
     };
   };
 
-  #getReadings(ray: [{x: number, y: number}, {x: number, y: number}] ,roadBorders: {x: number, y:number}[][])
+  #getReadings(ray: [{x: number, y: number}, {x: number, y: number}], roadBorders: {x: number, y:number}[][], traffic: Car[])
   {
     let touches = [];
     for (let i = 0; i < roadBorders.length; i++) {
@@ -42,6 +41,19 @@ class Sensor {
       )
       if (touch) {
         touches.push(touch);
+      };
+    };
+    for (let i = 0; i < traffic.length; i++) {
+      for (let j = 0; j < traffic[i].polygon.length; j++) {
+        const touch = getIntersection(
+          ray[0],
+          ray[1],
+          traffic[i].polygon[j],
+          traffic[i].polygon[(j + 1) % traffic[i].polygon.length]
+        )
+        if (touch) {
+          touches.push(touch);
+        };
       };
     };
 
