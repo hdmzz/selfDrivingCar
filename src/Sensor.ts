@@ -1,4 +1,4 @@
-import Car from "./Car";
+import { Car } from "./Car";
 import { getIntersection, lerp } from "./Utils";
 
 class Sensor {
@@ -7,11 +7,11 @@ class Sensor {
   rayLenght: number;
   raySpread: number;
   rays: [{x: number, y: number}, {x: number, y: number}][];
-  readings: any[];
+  readings: ({x: number, y:number, offset:number} | null)[];
 
   constructor(car: Car) {
     this.car = car;
-    this.rayCount = 10;
+    this.rayCount = 5;
     this.rayLenght = 150;
     this.raySpread = Math.PI/2;//90deg en radian
     this.rays = [];
@@ -58,12 +58,12 @@ class Sensor {
     };
 
     if (touches.length == 0) {
-      return null;
+      return null;  // retourne null au lieu de undefined
     } else {
       const offset = touches.map(e => e.offset);
       const minOffset = Math.min(...offset);
-      return touches.find(e => e.offset == minOffset);
-    };
+      return touches.find(e => e.offset == minOffset) || null;  // assure qu'on retourne null si find échoue
+    }
   };
 
   #castRays()
@@ -90,8 +90,8 @@ class Sensor {
     //ray structure [start, end]
     for (let i = 0; i < this.rayCount; i++) {
       let end = this.rays[i][1];
-      if (this.readings[i]) {
-        end = this.readings[i];
+      if (this.readings[i]) {  // vérifie si la lecture n'est pas null
+        end = this.readings[i]!;  // le ! indique à TypeScript que la valeur n'est pas null
       }
       ctx.beginPath();
       ctx.lineWidth = 2;

@@ -1,23 +1,23 @@
 class	Controls
 {
-	forward: boolean;
-	reverse: boolean;
-	left: boolean;
-	right: boolean;
+	forward: number;
+	reverse: number;
+	left: number;
+	right: number;
 
 	constructor(controlType: string)
 	{
-		this.forward = false;
-		this.reverse = false;
-		this.right = false;
-		this.left = false;
+		this.forward = 0;
+		this.reverse = 0;
+		this.right = 0;
+		this.left = 0;
 
     switch (controlType) {
 			case "KEYS":
 				this.#addKeyBoardListener();
 				break;
 			case "DUMMY":
-				this.forward = true;
+				this.forward = 1;
 				break;
 		};
 	};
@@ -30,16 +30,16 @@ class	Controls
 		document.onkeydown = (event) => {
 			switch (event.key) {
 				case "ArrowUp":
-					this.forward = true;
+					this.forward = 1;
 					break;
 				case "ArrowDown":
-					this.reverse = true;
+					this.reverse = 1;
 					break;
 				case "ArrowLeft":
-					this.left = true;
+					this.left = 1;
 					break;
 				case "ArrowRight":
-					this.right = true;
+					this.right = 1;
 					break;
 			};
 		};
@@ -47,16 +47,16 @@ class	Controls
 		document.onkeyup = (event) => {
 			switch (event.key) {
 				case "ArrowUp":
-					this.forward = false;
+					this.forward = 0;
 					break;
 				case "ArrowDown":
-					this.reverse = false;
+					this.reverse = 0;
 					break;
 				case "ArrowLeft":
-					this.left = false;
+					this.left = 0;
 					break;
 				case "ArrowRight":
-					this.right = false;
+					this.right = 0;
 					break;
 			};
 		};

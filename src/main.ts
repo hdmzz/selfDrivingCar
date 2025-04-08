@@ -11,11 +11,11 @@ const	ctx = canvas.getContext("2d");
 if (ctx === null) {
 	alert("No context here!");
 } else {
-  const	road = new Roads(canvas.width / 2, canvas.width * 0.9);
+  const	road = new Roads(canvas.width / 2, canvas.width * 0.9, 3);
   const traffic: Car[] = [
-    new Car(road.getLaneCenter(1), 100, 30, 50, "DUMMY", 2),
+    new Car(road.getLaneCenter(1), 20, 30, 50, "DUMMY", 3),
   ]
-	const	car = new Car(road.getLaneCenter(2), 100, 30, 50, "KEYS");
+	const	car = new Car(road.getLaneCenter(1), 100, 30, 50, "AI", 4);
 	animate();
 	function animate() {
     for (let i = 0; i < traffic.length; i++) {

@@ -1,8 +1,9 @@
 import Controls from "./Controls";
+import { NeuralNetwork } from "./Network";
 import Sensor from "./Sensor";
-import { getIntersection, polysIntersect } from "./Utils";
+import { polysIntersect } from "./Utils";
 
-export class	Car {
+export class Car {
 	x: number;
 	y: number;
 	width: number;
@@ -16,12 +17,13 @@ export class	Car {
   sensor: Sensor | null = null;
   polygon: {x: number, y: number}[];
   damaged: boolean;
+  brain: NeuralNetwork | null = null;
+  useBrain: boolean;
 
-
-	constructor(x: number, y: number, width: number, height: number, controlType: string, maxspeed: number = 3)
+	constructor(x: number, y: number, width: number, height: number, controlType: string, maxspeed: number = 2)
 	{
 		this.x = x
-		this.y = y;
+    this.y = y;
 		this.width = width;
 		this.height = height;
 		this.speed = 0;
@@ -31,11 +33,14 @@ export class	Car {
 		this.angle = 0;;
     this.polygon = [];
     this.damaged = false;
-
-		this.controls = new Controls(controlType);
+    this.controls = new Controls(controlType);
+    this.useBrain = controlType=="AI";
+    
     if (controlType != "DUMMY") {
       this.sensor = new Sensor(this);
+      this.brain = new NeuralNetwork([this.sensor!.rayCount, 6, 4] );//ici on passe le nombre de rayon, une couche intermediaire de sixx neurones et on attendra le resultat soit le derniere couche de 4 neurones  haut bas gauche droite
     }
+
     this.createPolygon();
 	};
 
@@ -76,6 +81,13 @@ export class	Car {
     };
     if (this.sensor) {
       this.sensor.update(roadBorders, traffic);
+      const offsets = this.sensor.readings.map(sensor => sensor==null ? 0 : 1 - sensor!.offset);
+      const outputs = NeuralNetwork.feedForward(offsets, this.brain!);
+
+      console.log(outputs);
+      if (this.useBrain) {
+        this.controls.forward = outputs[0];
+      };
     };
 	};
 

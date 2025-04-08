@@ -1,3 +1,25 @@
+export class NeuralNetwork {
+  levels: Level[];
+
+  constructor(neuronCounts: number[])
+  {
+    this.levels = [];
+    for (let i = 0; i < neuronCounts.length - 1; i++) {
+      this.levels.push(new Level(neuronCounts[i], neuronCounts[i + 1]));
+    };
+  };
+
+  static feedForward(givenInputs: number[], network: NeuralNetwork)
+  {
+    let outputs = Level.feedForward(givenInputs, network.levels[0]);
+    for (let i = 1; i < network.levels.length; i++) {
+      outputs = Level.feedForward(outputs, network.levels[i]);
+    };
+
+    return (outputs);
+  };
+};
+
 class Level {
   inputs: Array<number>;
   outputs: Array<number>;
@@ -51,7 +73,7 @@ class Level {
    * les poids sont organise de cette maniere
    * WEIGHTS[INPUTS LEN][OUTPUTS LEN]
    */
-  static feedForward(givenInputs: [number], level: Level)
+  static feedForward(givenInputs: number[], level: Level)
   {
     for (let i = 0; i< level.inputs.length; i++) {
       level.inputs[i] = givenInputs[i];
@@ -72,4 +94,4 @@ class Level {
 
     return (level.outputs);
   };
-}
+};
