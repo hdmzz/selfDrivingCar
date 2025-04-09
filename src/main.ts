@@ -1,39 +1,47 @@
-import {Car} from "./Car";
+import { Car } from "./Car";
 import Roads from "./Road";
-import Sensor from "./Sensor";
+import { Visualizer } from "./Visualizer";
 
+const	carCanvas = document.getElementById("carCanvas") as HTMLCanvasElement;
+const	networkCanvas = document.getElementById("networkCanvas") as HTMLCanvasElement;
+const	carCtx = carCanvas.getContext("2d");
+const	networkCtx = networkCanvas.getContext("2d");
 
-const	canvas = document.getElementById("myCanvas") as HTMLCanvasElement;
+carCanvas!.width = 200;
+networkCanvas.width = 300;
 
-canvas!.width = 200;
-const	ctx = canvas.getContext("2d");
-
-if (ctx === null) {
+if (carCtx === null) {
 	alert("No context here!");
 } else {
-  const	road = new Roads(canvas.width / 2, canvas.width * 0.9, 3);
+  const	road = new Roads(carCanvas.width / 2, carCanvas.width * 0.9, 3);
+	const	car = new Car(road.getLaneCenter(1), 100, 30, 50, "AI", 4);
   const traffic: Car[] = [
     new Car(road.getLaneCenter(1), 20, 30, 50, "DUMMY", 3),
   ]
-	const	car = new Car(road.getLaneCenter(1), 100, 30, 50, "AI", 4);
+
 	animate();
+
 	function animate() {
     for (let i = 0; i < traffic.length; i++) {
       traffic[i].update(road.borders, []);
     }
 		car.update(road.borders, traffic);
-		canvas.height = window.innerHeight;
+		carCanvas.height = window.innerHeight;
+		networkCanvas.height = window.innerHeight;
 
-		ctx?.save();
-		ctx?.translate(0, -car.y + canvas.height * 0.7);
+		carCtx?.save();
+		carCtx?.translate(0, -car.y + carCanvas.height * 0.7);
 
-		road.draw(ctx!);
+		road.draw(carCtx!);
     for (let i = 0; i < traffic.length; i++) {
-      traffic[i].draw(ctx!, "red");
+      traffic[i].draw(carCtx!, "red");
     }
-    car.draw(ctx!);//si la voiture est draw en dernier, les rayons seront sur les autres voitures mais si dessinee avant alors les rayons passent en dessous
+    car.draw(carCtx!);//si la voiture est draw en dernier, les rayons seront sur les autres voitures mais si dessinee avant alors les rayons passent en dessous
 
-		ctx?.restore();
+		carCtx?.restore();
+
+    Visualizer.drawNetwork(networkCtx!, car.brain!);
+
 		requestAnimationFrame(animate);
 	};
 };

@@ -20,7 +20,7 @@ export class NeuralNetwork {
   };
 };
 
-class Level {
+export class Level {
   inputs: Array<number>;
   outputs: Array<number>;
   biases: Array<number>;

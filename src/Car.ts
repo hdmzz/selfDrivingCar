@@ -84,7 +84,6 @@ export class Car {
       const offsets = this.sensor.readings.map(sensor => sensor==null ? 0 : 1 - sensor!.offset);
       const outputs = NeuralNetwork.feedForward(offsets, this.brain!);
 
-      console.log(outputs);
       if (this.useBrain) {
         this.controls.forward = outputs[0];
       };
