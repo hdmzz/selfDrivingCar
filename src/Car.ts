@@ -86,6 +86,9 @@ export class Car {
 
       if (this.useBrain) {
         this.controls.forward = outputs[0];
+        this.controls.left = outputs[1];
+        this.controls.right = outputs[2];
+        this.controls.reverse = outputs[3];
       };
     };
 	};
@@ -147,7 +150,7 @@ export class Car {
 		this.y -= Math.cos(this.angle) * this.speed;
 	}
 
-	draw(ctx: CanvasRenderingContext2D, color: string = "blue")
+	draw(ctx: CanvasRenderingContext2D, color: string = "blue", drawRay: boolean = false)
 	{
     ctx.fillStyle = this.damaged ? "gray" : color;
     ctx.beginPath();
@@ -156,7 +159,7 @@ export class Car {
       ctx.lineTo(this.polygon[i].x, this.polygon[i].y);
     }
     ctx.fill();
-    if (this.sensor) {
+    if (this.sensor && drawRay) {
       this.sensor.draw(ctx);
     };
 	};

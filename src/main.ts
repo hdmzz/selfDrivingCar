@@ -1,4 +1,5 @@
 import { Car } from "./Car";
+import { NeuralNetwork } from "./Network";
 import Roads from "./Road";
 import { Visualizer } from "./Visualizer";
 
@@ -10,38 +11,90 @@ const	networkCtx = networkCanvas.getContext("2d");
 carCanvas!.width = 200;
 networkCanvas.width = 300;
 
-if (carCtx === null) {
-	alert("No context here!");
-} else {
-  const	road = new Roads(carCanvas.width / 2, carCanvas.width * 0.9, 3);
-	const	car = new Car(road.getLaneCenter(1), 100, 30, 50, "AI", 4);
-  const traffic: Car[] = [
-    new Car(road.getLaneCenter(1), 20, 30, 50, "DUMMY", 3),
-  ]
 
-	animate();
+const	road = new Roads(carCanvas.width / 2, carCanvas.width * 0.9, 3);
+const N = 1000;
+const	cars = generateCars(N);
+const traffic=[
+  new Car(road.getLaneCenter(1),-100,30,50,"DUMMY",2),
+  new Car(road.getLaneCenter(0),-300,30,50,"DUMMY",2),
+  new Car(road.getLaneCenter(2),-300,30,50,"DUMMY",2),
+  new Car(road.getLaneCenter(0),-500,30,50,"DUMMY",2),
+  new Car(road.getLaneCenter(1),-500,30,50,"DUMMY",2),
+  new Car(road.getLaneCenter(1),-700,30,50,"DUMMY",2),
+  new Car(road.getLaneCenter(2),-700,30,50,"DUMMY",2),
+];
 
-	function animate() {
-    for (let i = 0; i < traffic.length; i++) {
-      traffic[i].update(road.borders, []);
+let bestCar = cars[0];
+if (localStorage.getItem("bestBrain")) {
+  console.log("hghh");
+  
+  for (let i = 0; i < cars.length; i++) {
+    cars[i].brain = JSON.parse(localStorage.getItem("bestBrain")!);
+    if (i != 0) {
+      //au dessus on change le brain de chaque car a partir du cerveau me mieux avec des valeurs random et on affine celui ci avec la fonction mutate et une valeur petite amount
+      NeuralNetwork.mutate(cars[i].brain!, 0.1);
     }
-		car.update(road.borders, traffic);
-		carCanvas.height = window.innerHeight;
-		networkCanvas.height = window.innerHeight;
+  }
+}
+animate();
 
-		carCtx?.save();
-		carCtx?.translate(0, -car.y + carCanvas.height * 0.7);
+function save()
+{
+  localStorage.setItem("bestBrain", JSON.stringify(bestCar.brain));
+}
 
-		road.draw(carCtx!);
-    for (let i = 0; i < traffic.length; i++) {
-      traffic[i].draw(carCtx!, "red");
-    }
-    car.draw(carCtx!);//si la voiture est draw en dernier, les rayons seront sur les autres voitures mais si dessinee avant alors les rayons passent en dessous
+function discard()
+{
+  localStorage.removeItem("bestBrain");
+}
 
-		carCtx?.restore();
+(window as any).save = save;
+(window as any).discard = discard;
 
-    Visualizer.drawNetwork(networkCtx!, car.brain!);
 
-		requestAnimationFrame(animate);
-	};
+function generateCars(N: number)
+{
+  const cars: Car[] = [];
+  while (N > 0) {
+    cars.push(new Car(road.getLaneCenter(1), 100, 30, 50, "AI", 4));
+    N--;
+  }
+  return cars;
+}
+
+
+function animate() {
+  for (let i = 0; i < traffic.length; i++) {
+    traffic[i].update(road.borders, []);
+  }
+
+  for (let i = 0; i < cars.length; i++) {
+    cars[i].update(road.borders, traffic);
+  }
+
+  bestCar = cars.find(c => c.y == Math.min(...cars.map(c => c.y)))!;
+
+  carCanvas.height = window.innerHeight;
+  networkCanvas.height = window.innerHeight;
+
+  carCtx?.save();
+  carCtx?.translate(0, -bestCar!.y + carCanvas.height * 0.7);
+
+  road.draw(carCtx!);
+  for (let i = 0; i < traffic.length; i++) {
+    traffic[i].draw(carCtx!, "red");
+  }
+  carCtx!.globalAlpha = 0.2;
+  for (let i = 0; i < cars.length; i++) {
+    cars[i].draw(carCtx!, "blue", );//si la voiture est draw en dernier, les rayons seront sur les autres voitures mais si dessinee avant alors les rayons passent en dessous
+  }
+  carCtx!.globalAlpha = 1;
+  bestCar!.draw(carCtx!, "blue", true);
+  carCtx?.restore();
+
+  Visualizer.drawNetwork(networkCtx!, bestCar!.brain!);
+
+  requestAnimationFrame(animate);
 };
+
