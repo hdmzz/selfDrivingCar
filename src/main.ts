@@ -13,16 +13,16 @@ networkCanvas.width = 300;
 
 
 const	road = new Roads(carCanvas.width / 2, carCanvas.width * 0.9, 3);
-const N = 1000;
+const N = 1;
 const	cars = generateCars(N);
 const traffic=[
-  new Car(road.getLaneCenter(1),-100,30,50,"DUMMY",2),
-  new Car(road.getLaneCenter(0),-300,30,50,"DUMMY",2),
-  new Car(road.getLaneCenter(2),-300,30,50,"DUMMY",2),
-  new Car(road.getLaneCenter(0),-500,30,50,"DUMMY",2),
-  new Car(road.getLaneCenter(1),-500,30,50,"DUMMY",2),
-  new Car(road.getLaneCenter(1),-700,30,50,"DUMMY",2),
-  new Car(road.getLaneCenter(2),-700,30,50,"DUMMY",2),
+  new Car(road.getLaneCenter(1),-100,30,50,"DUMMY",2, "red"),
+  new Car(road.getLaneCenter(0),-300,30,50,"DUMMY",2, "red"),
+  new Car(road.getLaneCenter(2),-300,30,50,"DUMMY",2, "red"),
+  new Car(road.getLaneCenter(0),-500,30,50,"DUMMY",2, "red"),
+  new Car(road.getLaneCenter(1),-500,30,50,"DUMMY",2, "red"),
+  new Car(road.getLaneCenter(1),-700,30,50,"DUMMY",2, "red"),
+  new Car(road.getLaneCenter(2),-700,30,50,"DUMMY",2, "red"),
 ];
 
 let bestCar = cars[0];
@@ -83,14 +83,14 @@ function animate() {
 
   road.draw(carCtx!);
   for (let i = 0; i < traffic.length; i++) {
-    traffic[i].draw(carCtx!, "red");
+    traffic[i].draw(carCtx!);
   }
   carCtx!.globalAlpha = 0.2;
   for (let i = 0; i < cars.length; i++) {
-    cars[i].draw(carCtx!, "blue", );//si la voiture est draw en dernier, les rayons seront sur les autres voitures mais si dessinee avant alors les rayons passent en dessous
+    cars[i].draw(carCtx!);//si la voiture est draw en dernier, les rayons seront sur les autres voitures mais si dessinee avant alors les rayons passent en dessous
   }
   carCtx!.globalAlpha = 1;
-  bestCar!.draw(carCtx!, "blue", true);
+  bestCar!.draw(carCtx!, true);
   carCtx?.restore();
 
   Visualizer.drawNetwork(networkCtx!, bestCar!.brain!);

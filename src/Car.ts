@@ -19,8 +19,10 @@ export class Car {
   damaged: boolean;
   brain: NeuralNetwork | null = null;
   useBrain: boolean;
+  img: HTMLImageElement;
+  mask: HTMLCanvasElement;
 
-	constructor(x: number, y: number, width: number, height: number, controlType: string, maxspeed: number = 2)
+	constructor(x: number, y: number, width: number, height: number, controlType: string, maxspeed: number = 2, color: string = "blue")
 	{
 		this.x = x
     this.y = y;
@@ -36,6 +38,23 @@ export class Car {
     this.controls = new Controls(controlType);
     this.useBrain = controlType=="AI";
     
+    this.img=new Image();
+    this.img.src="car.png"
+
+    this.mask=document.createElement("canvas");
+    this.mask.width=width;
+    this.mask.height=height;
+
+    const maskCtx=this.mask.getContext("2d");
+    this.img.onload=()=>{
+        maskCtx!.fillStyle=color;
+        maskCtx!.rect(0,0,this.width,this.height);
+        maskCtx!.fill();
+
+        maskCtx!.globalCompositeOperation="destination-atop";
+        maskCtx!.drawImage(this.img,0,0,this.width,this.height);
+    }
+
     if (controlType != "DUMMY") {
       this.sensor = new Sensor(this);
       this.brain = new NeuralNetwork([this.sensor!.rayCount, 6, 4] );//ici on passe le nombre de rayon, une couche intermediaire de sixx neurones et on attendra le resultat soit le derniere couche de 4 neurones  haut bas gauche droite
@@ -150,17 +169,42 @@ export class Car {
 		this.y -= Math.cos(this.angle) * this.speed;
 	}
 
-	draw(ctx: CanvasRenderingContext2D, color: string = "blue", drawRay: boolean = false)
-	{
-    ctx.fillStyle = this.damaged ? "gray" : color;
-    ctx.beginPath();
-    ctx.moveTo(this.polygon[0].x, this.polygon[0].y);
-    for (let i = 1; i < this.polygon.length; i++) {
-      ctx.lineTo(this.polygon[i].x, this.polygon[i].y);
+	//draw(ctx: CanvasRenderingContext2D, color: string = "blue", drawRay: boolean = false)
+	//{
+  //  if (this.sensor && drawRay) {
+  //    this.sensor.draw(ctx);
+  //  };
+  //  ctx.fillStyle = this.damaged ? "gray" : color;
+  //  ctx.beginPath();
+  //  ctx.moveTo(this.polygon[0].x, this.polygon[0].y);
+  //  for (let i = 1; i < this.polygon.length; i++) {
+  //    ctx.lineTo(this.polygon[i].x, this.polygon[i].y);
+  //  }
+  //  ctx.fill();
+	//};
+
+  
+  draw(ctx: CanvasRenderingContext2D, drawSensor=false){
+    if(this.sensor && drawSensor){
+        this.sensor.draw(ctx);
     }
-    ctx.fill();
-    if (this.sensor && drawRay) {
-      this.sensor.draw(ctx);
-    };
-	};
+
+    ctx.save();
+    ctx.translate(this.x,this.y);
+    ctx.rotate(-this.angle);
+    if(!this.damaged){
+        ctx.drawImage(this.mask,
+            -this.width/2,
+            -this.height/2,
+            this.width,
+            this.height);
+        ctx.globalCompositeOperation="multiply";
+    }
+    ctx.drawImage(this.img,
+        -this.width/2,
+        -this.height/2,
+        this.width,
+        this.height);
+    ctx.restore();
+  }
 };
