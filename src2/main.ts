@@ -50,9 +50,25 @@ function removeRandomSegment()
     const success = graph.tryRemoveSegment(segToDel);   
     ctx!.clearRect(0, 0, myCanvas.width, myCanvas.height);
     graph.draw(ctx!);
-    console.log("Seg : ", success);
+    console.log("RemoveSeg : ", success);
+}
+
+function removeRandomPoint()
+{
+    if (graph.points.length === 0) {
+        console.log("No Points");
+        return;
+    }
+    const index = Math.floor(Math.random() * graph.points.length);
+    const point = graph.points[index];
+
+    const success = graph.tryRemoveRandomPoint(point);
+    ctx!.clearRect(0, 0, myCanvas.width, myCanvas.height);
+    graph.draw(ctx!);
+    console.log("Remove Seg : ", success);
 }
 
 (window as any).addRandomPoint = addRandomPoint;
 (window as any).addRandomSegment = addRandomSegment;
 (window as any).removeRandomSegment = removeRandomSegment;
+(window as any).removeRandomPoint = removeRandomPoint;

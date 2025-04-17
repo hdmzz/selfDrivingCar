@@ -19,9 +19,27 @@ export class Graph {
         return true;
     }
 
+    removePoint(point: Point): boolean
+    {
+        this.points.splice(this.points.indexOf(point), 1);
+        return true; 
+    }
+
+    tryRemoveRandomPoint(point: Point) : boolean
+    {
+        if (!this.containsPoint(point))
+            return false;
+        return this.removePoint(point);
+    }
+
+    containsPoint(point: Point)
+    {
+        return (this.points.find((p) => p.equals(point)))
+    }
+
     tryAddPoint(point: Point): boolean
     {
-        if (this.points.find((p) => p.equals(point)))
+        if (this.containsPoint(point))
             return false;
         return this.addPoint(point);;
     }
