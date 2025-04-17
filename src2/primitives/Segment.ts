@@ -11,4 +11,14 @@ export class Segment {
     ctx.lineTo(this.p2.x, this.p2.y);
     ctx.stroke();
   }
+
+  equals(segment: Segment)
+  {
+    return (this.includes(segment.p1) && this.includes(segment.p2));
+  };
+
+  includes(point: Point)
+  {
+    return (this.p1.equals(point) || this.p2.equals(point));
+  };
 }

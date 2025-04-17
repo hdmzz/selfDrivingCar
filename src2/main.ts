@@ -21,4 +21,38 @@ const segments = [
 
 const graph = new Graph(points, segments);
 
-graph.draw(ctx!)
+graph.draw(ctx!);
+
+function addRandomPoint()
+{
+    const success = graph.tryAddPoint(new Point(Math.random() * myCanvas.width, Math.random() * myCanvas.height));
+    ctx!.clearRect(0, 0, myCanvas.width, myCanvas.height);
+    graph.draw(ctx!);
+    console.log("Point: ", success);
+}
+
+function addRandomSegment()
+{
+    const index1 = Math.floor(Math.random() * graph.points.length);
+    const index2 = Math.floor(Math.random() * graph.points.length);
+    const p1 = graph.points[index1];
+    const p2 = graph.points[index2];
+    const success = graph.tryAddSegment(p1, p2);
+    ctx!.clearRect(0, 0, myCanvas.width, myCanvas.height);
+    graph.draw(ctx!);
+    console.log("Seg : ", success);
+}
+
+function removeRandomSegment()
+{
+    const index = Math.floor(Math.random() * graph.segments.length);
+    const segToDel = graph.segments[index];
+    const success = graph.tryRemoveSegment(segToDel);   
+    ctx!.clearRect(0, 0, myCanvas.width, myCanvas.height);
+    graph.draw(ctx!);
+    console.log("Seg : ", success);
+}
+
+(window as any).addRandomPoint = addRandomPoint;
+(window as any).addRandomSegment = addRandomSegment;
+(window as any).removeRandomSegment = removeRandomSegment;

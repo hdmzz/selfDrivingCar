@@ -9,4 +9,9 @@ export class Point {
     ctx.arc(this.x, this.y, rad, 0, Math.PI * 2);
     ctx.fill();
   };
+
+  equals(point: Point)
+  {
+    return (this.x === point.x && this.y === point.y);
+  };
 }
