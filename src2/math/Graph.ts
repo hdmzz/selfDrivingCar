@@ -41,11 +41,15 @@ export class Graph {
     {
         const segs = this.getSegmentWithPoint(point);
 
+        if (!this.containsPoint(point))
+            return false;
+
         for (const seg of segs) {
             this.removeSegment(seg);
         }
         this.points.splice(this.points.indexOf(point), 1);
-        return true; 
+
+        return (true); 
     }
 
     tryRemoveRandomPoint(point: Point): boolean
