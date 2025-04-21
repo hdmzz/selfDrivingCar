@@ -13,6 +13,24 @@ export class Graph {
         }
     }
 
+    dispose()
+    {
+        this.points.length = 0
+        this.segments.length = 0
+    }
+
+    getSegmentWithPoint(point): Segment[]
+    {
+        const segs:Segment[] = [];
+
+        for (const seg of this.segments) {
+            if (seg.includes(point))
+                segs.push(seg);
+        }
+
+        return segs;
+    }
+
     addPoint(point: Point): boolean
     {
         this.points.push(point);
@@ -21,15 +39,21 @@ export class Graph {
 
     removePoint(point: Point): boolean
     {
+        const segs = this.getSegmentWithPoint(point);
+
+        for (const seg of segs) {
+            this.removeSegment(seg);
+        }
         this.points.splice(this.points.indexOf(point), 1);
         return true; 
     }
 
-    tryRemoveRandomPoint(point: Point) : boolean
+    tryRemoveRandomPoint(point: Point): boolean
     {
         if (!this.containsPoint(point))
             return false;
-        return this.removePoint(point);
+
+        return (this.removePoint(point));
     }
 
     containsPoint(point: Point)
