@@ -21,7 +21,12 @@ const segments = [
   new Segment(points[0], points[1]),
 ]
 
-const graph = new Graph(points, segments);
+const graphString = localStorage.getItem("graph");
+console.log(graphString);
+const graphInfo = graphString ? JSON.parse(graphString) : null;
+console.log(graphInfo);
+
+const graph = graphInfo ? Graph.load(graphInfo) : new Graph(points, segments);
 const viewPort = new Viewport(myCanvas);
 const graphEditor = new GraphEditor(viewPort, graph);
 
@@ -29,14 +34,23 @@ animate();
 
 function animate()
 {
-    ctx!.clearRect(0, 0, myCanvas.width, myCanvas.height);
-    ctx!.save();
-    ctx!.scale(1 / viewPort.zoom, 1 / viewPort.zoom);
+    viewPort.reset();   
     graphEditor.display();
-    ctx!.restore()
     requestAnimationFrame(animate);
 }
 
-(window as any).graph = graph;
+function save()
+{
+    localStorage.setItem("graph", JSON.stringify(graph));
+};
+
+function dispose()
+{
+    graphEditor.dispose();
+};
+
+(window as any).graph       = graph;
 (window as any).graphEditor = graphEditor;
-(window as any).viewPort = viewPort;
+(window as any).viewPort    = viewPort;
+(window as any).save        = save;
+(window as any).dispose     = dispose;
