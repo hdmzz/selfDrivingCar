@@ -1,13 +1,16 @@
 import { GraphEditor } from "./GraphEditor";
 import { Graph } from "./math/Graph";
+import { Envelope } from "./primitives/Envelope";
 import { Point } from "./primitives/Point";
+import { Polygon } from "./primitives/Polygon";
 import { Segment } from "./primitives/Segment"; 
 import { Viewport } from "./Viewport";
+import { World } from "./World";
 
 const myCanvas = document.getElementById("myCanvas") as HTMLCanvasElement;
 
-myCanvas!.width = 600;
-myCanvas!.height = 600;
+myCanvas!.width = 500;
+myCanvas!.height = 500;
 
 const ctx = myCanvas.getContext("2d");
 
@@ -30,12 +33,16 @@ const graph = graphInfo ? Graph.load(graphInfo) : new Graph(points, segments);
 const viewPort = new Viewport(myCanvas);
 const graphEditor = new GraphEditor(viewPort, graph);
 
+const world = new World(graph, 80, 200);
+
 animate();
 
 function animate()
 {
     viewPort.reset();   
     graphEditor.display();
+    world.generate();
+    world.draw(ctx!);
     requestAnimationFrame(animate);
 }
 
