@@ -4,72 +4,55 @@ import { Segment } from "../primitives/Segment";
 export class Graph {
     constructor(public points: Point[], public segments: Segment[]){};
 
-    draw(ctx: CanvasRenderingContext2D) {
+    draw(ctx: CanvasRenderingContext2D)
+    {
         for (const point of this.points) {
-        point.draw(ctx);
-        }
+            point.draw(ctx);
+        };
         for (const seg of this.segments) {
-        seg.draw(ctx);
-        }
-    }
+            seg.draw(ctx);
+        };
+    };
 
     dispose()
     {
         this.points.length = 0
         this.segments.length = 0
-    }
+    };
 
     getSegmentWithPoint(point): Segment[]
     {
         const segs:Segment[] = [];
 
         for (const seg of this.segments) {
-            if (seg.includes(point))
-                segs.push(seg);
-        }
+            if (seg.includes(point)) segs.push(seg);
+        };
 
         return segs;
-    }
+    };
 
     addPoint(point: Point): boolean
     {
         this.points.push(point);
         return true;
-    }
+    };
 
     removePoint(point: Point): boolean
     {
         const segs = this.getSegmentWithPoint(point);
 
-        if (!this.containsPoint(point))
-            return false;
-
+        if (!this.containsPoint(point)) return false;
         for (const seg of segs) {
             this.removeSegment(seg);
         }
         this.points.splice(this.points.indexOf(point), 1);
 
         return (true); 
-    }
-
-    tryRemoveRandomPoint(point: Point): boolean
-    {
-        if (!this.containsPoint(point))
-            return false;
-
-        return (this.removePoint(point));
-    }
+    };
 
     containsPoint(point: Point)
     {
         return (this.points.find((p) => p.equals(point)))
-    }
-
-    tryAddPoint(point: Point): boolean
-    {
-        if (this.containsPoint(point))
-            return false;
-        return this.addPoint(point);;
     }
 
     addSegment(segment: Segment): boolean

@@ -25,24 +25,21 @@ const segments = [
 ]
 
 const graphString = localStorage.getItem("graph");
-console.log(graphString);
 const graphInfo = graphString ? JSON.parse(graphString) : null;
-console.log(graphInfo);
-
 const graph = graphInfo ? Graph.load(graphInfo) : new Graph(points, segments);
 const viewPort = new Viewport(myCanvas);
 const graphEditor = new GraphEditor(viewPort, graph);
-
-const world = new World(graph, 80, 200);
+const world = new World(graph);
 
 animate();
 
 function animate()
 {
     viewPort.reset();   
-    graphEditor.display();
     world.generate();
     world.draw(ctx!);
+    ctx!.globalAlpha = 0.3;
+    graphEditor.display();
     requestAnimationFrame(animate);
 }
 

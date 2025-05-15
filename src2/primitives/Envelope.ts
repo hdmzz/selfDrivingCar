@@ -4,8 +4,9 @@ import { Polygon } from "./Polygon";
 import { Segment } from "./Segment";
 
 export class Envelope {
-    skeleton: Segment;
-    poly: Polygon;
+    skeleton:   Segment;
+    poly:       Polygon;
+
     /**
      * @param skeleton a segment wich we will position a polygon around
      * @param roadWidth 
@@ -37,20 +38,14 @@ export class Envelope {
         for (let i = alpha_ccw; i <= alpha_cw + eps; i += step) {
            points.push(translate(p2, Math.PI + i, radius));
         };
-
-        //for visualisation only 
-        for (const point of points)
-        {
-            point.draw((document.getElementById("myCanvas") as HTMLCanvasElement).getContext("2d")!, {size: 5, color: "red"});
-        }
   
         return new Polygon(points);
     };
 
-    draw(ctx: CanvasRenderingContext2D)
+    draw(ctx: CanvasRenderingContext2D, options: {} = {})
     {
         if (this.poly?.points.length === 0 || this.skeleton === undefined)
             return;
-        this.poly.draw(ctx);
+        this.poly.draw(ctx, options);
     };
 };
