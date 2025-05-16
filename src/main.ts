@@ -13,7 +13,7 @@ networkCanvas.width = 300;
 
 
 const	road = new Roads(carCanvas.width / 2, carCanvas.width * 0.9, 3);
-const N = 1;
+const N = 1000;
 const	cars = generateCars(N);
 const traffic=[
   new Car(road.getLaneCenter(1),-100,30,50,"DUMMY",2, "red"),
