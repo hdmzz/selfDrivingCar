@@ -81,3 +81,19 @@ function lerp( A: number, B: number, t: number )
 {
     return ( A + (( B - A ) * t ));
 };
+
+/**
+ * 
+ * @param p un point (vecteur a normalizer) 
+ * la norme d'un vecteur est obtenue en multipliant chaque element de p (x, y) par 1/ la magnitude de p (la longeur) 
+ * @returns la norme c'est a dire la direction
+ */
+export function normalize( p: Point )
+{
+    return ( scale( p, 1 / magnitude( p )));
+};
+
+function magnitude( p: Point )
+{
+    return ( Math.hypot( p.x, p.y ));//la distance entre les 2points d'un vecteur dimension 1
+};

@@ -15,7 +15,7 @@ export class World {
     spacing: number;
     buildingMinLenght: number;
 
-    constructor( graph: Graph, roadWidth = 100, roadRoundness = 10, buildingWidth = 15, spacing = 50, buildMinLength = 15 )
+    constructor( graph: Graph, roadWidth = 100, roadRoundness = 10, buildingWidth = 150, spacing = 50, buildMinLength = 150 )
     {
         this.graph = graph; 
         this.roadWidth = roadWidth;
@@ -64,6 +64,10 @@ export class World {
                 i--; //dans ce cas la il faut rester au meme index
             };
         };
+
+        const support: Array<Segment> = [];
+
+        
 
         return ( guides );
     };

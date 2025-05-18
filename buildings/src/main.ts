@@ -9,8 +9,8 @@ import { World } from "./World";
 
 const myCanvas = document.getElementById("myCanvas") as HTMLCanvasElement;
 
-myCanvas!.width = 500;
-myCanvas!.height = 500;
+myCanvas!.width = 600;
+myCanvas!.height = 600;
 
 const ctx = myCanvas.getContext("2d");
 
