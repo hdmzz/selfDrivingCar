@@ -1,4 +1,4 @@
-import { distance } from "../utils/utils";
+import { distance, normalize, subtract } from "../utils/utils";
 import { Point } from "./Point";
 
 export class Segment {
@@ -28,5 +28,10 @@ export class Segment {
     includes( point: Point )
     {
         return ( this.p1.equals( point ) || this.p2.equals( point ));
+    };
+
+    directionVector()
+    {
+        return ( normalize( subtract( this.p2, this.p1 )));
     };
 };

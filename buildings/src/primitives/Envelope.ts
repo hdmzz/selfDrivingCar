@@ -8,7 +8,7 @@ export class Envelope {
     poly:       Polygon;
 
     /**
-     * @param skeleton a segment wich we will position a polygon around
+     * @param skeleton
      * @param roadWidth 
      * @param roudness 
     */
