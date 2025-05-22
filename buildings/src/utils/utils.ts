@@ -60,7 +60,8 @@ export function getIntersection( A: Point, B: Point, C: Point, D: Point ): { x: 
     const uTop = ( C.y - A.y ) * ( A.x - B.x ) - ( C.x - A.x ) * ( A.y - B.y );
     const bottom = ( D.y - C.y ) * ( B.x - A.x ) - ( D.x - C.x ) * ( B.y - A.y );
 
-    if ( bottom != 0 ) {
+    const eps = 0.001;
+    if ( Math.abs(bottom) > eps ) {//pour eviter les floating point problms
         const t = tTop / bottom;
         const u = uTop / bottom;
 
@@ -77,13 +78,12 @@ export function getIntersection( A: Point, B: Point, C: Point, D: Point ): { x: 
     return ( null );
 };
 
-function lerp( A: number, B: number, t: number )
+export function lerp( A: number, B: number, t: number )
 {
     return ( A + (( B - A ) * t ));
 };
 
 /**
- * 
  * @param p un point (vecteur a normalizer) 
  * la norme d'un vecteur est obtenue en multipliant chaque element de p (x, y) par 1/ la magnitude de p (la longeur) 
  * @returns la norme c'est a dire la direction
@@ -93,7 +93,12 @@ export function normalize( p: Point )
     return ( scale( p, 1 / magnitude( p )));
 };
 
-function magnitude( p: Point )
+export function magnitude( p: Point )
 {
     return ( Math.hypot( p.x, p.y ));//la distance entre les 2points d'un vecteur dimension 1
+};
+
+export function dot( p1: Point, p2: Point )
+{
+    return ( p1.x * p2.x + p1.y * p2.y );
 };
