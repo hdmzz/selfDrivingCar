@@ -1,3 +1,5 @@
+import { Building } from "./items/Building";
+import { Tree } from "./items/Tree";
 import { Graph } from "./math/Graph"
 import { Envelope } from "./primitives/Envelope";
 import { Point } from "./primitives/Point";
@@ -12,9 +14,9 @@ export class World {
     roadRoundness: number;
     roadWidth: number;
     envelopes: NonNullableArray<Envelope>;
-    buildings: NonNullableArray<Polygon>;
+    buildings: Array<Building>;
     roadBoarders: NonNullableArray<Segment>;
-    trees: NonNullableArray<Point>;
+    trees: NonNullableArray<Tree>;
     buildingWidth: number;
     spacing: number;
     buildingMinLenght: number;
@@ -55,7 +57,7 @@ export class World {
         ];
 
         const illegalPolys = [
-            ...this.buildings,
+            ...this.buildings.map(( b ) =>  b.base ),
             ...this.envelopes.map(( e ) => e.poly )
         ];
 
@@ -65,7 +67,7 @@ export class World {
         const top = Math.min( ...points.map(( p ) => p.y ));
         const bottom = Math.max( ...points.map(( p ) => p.y ));
 
-        const trees: Array<Point> = [];
+        const trees: Array<Tree> = [];
         let tryCount = 0;
         while ( tryCount < count ) {
             const p = new Point(
@@ -86,7 +88,7 @@ export class World {
             if ( keep ) {
                 for ( const tree of trees ) {
                     if ( !tree || !p || ( p.x === undefined || p.y === undefined )) continue;//due a la floating point exception
-                    if ( distance( tree, p ) < this.treeSize ) {
+                    if ( distance( tree.center, p ) < this.treeSize ) {
                         keep = false;
                         break;
                     };
@@ -106,7 +108,7 @@ export class World {
             };
 
             if (keep) {
-                trees.push( p );
+                trees.push( new Tree( p, this.treeSize ));
                 tryCount = 0;
             };
             tryCount++;
@@ -176,7 +178,7 @@ export class World {
             };
         };
 
-        return ( bases );
+        return ( bases.map(( b ) => new Building( b )));//a partir de la creer des buildings 
     };
 
     draw( ctx: CanvasRenderingContext2D )
@@ -198,7 +200,7 @@ export class World {
         };
 
         for ( const tree of this.trees ) {
-            tree.draw( ctx, { size: this.treeSize, color: "rgba(0, 0, 0, 0.5)" });
+            tree.draw( ctx );
         };
     };
 };
