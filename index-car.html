@@ -3,27 +3,28 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Éditeur de Graphe</title>
+    <title>Voiture Auto-conduisante</title>
     <!-- Sur GitHub Pages, il est préférable d'utiliser une base relative -->
     <base href="./">
-    <script type="module" crossorigin src="./assets/graph-DS1Ltycd.js"></script>
+    <script type="module" crossorigin src="./assets/car-DDJmYUjI.js"></script>
     <link rel="modulepreload" crossorigin href="./assets/modulepreload-polyfill-B5Qt9EMX.js">
     <link rel="stylesheet" crossorigin href="./assets/style-DPTMjSjK.css">
   </head>
   <body>
-    <h1>Éditeur de Graphe</h1>
+    <h1>Voiture Auto-conduisante</h1>
     
     <div class="navigation">
       <div class="nav-buttons">
         <a href="index.html" class="nav-button">Page principale</a>
-        <a href="index-car.html" class="nav-button">Voiture Auto-conduisante</a>
         <a href="index-buildings.html" class="nav-button">Génération de Bâtiments</a>
+        <a href="index-graph.html" class="nav-button">Éditeur de Graphe</a>
       </div>
     </div>
     
     <div class="current-section">
-      <h2>Éditeur de Graphe</h2>
-      <canvas id="myCanvas" oncontextmenu="event.preventDefault()"></canvas>
+      <h2>Voiture Auto-conduisante</h2>
+      <canvas id="carCanvas" oncontextmenu="event.preventDefault()"></canvas>
+      <canvas id="networkCanvas" oncontextmenu="event.preventDefault()"></canvas>
       <div class="controls">
         <button onclick="save()">💾</button>
         <button onclick="dispose()">🗑️</button>
