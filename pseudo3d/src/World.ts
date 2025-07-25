@@ -14,8 +14,8 @@ export class World {
     roadRoundness: number;
     roadWidth: number;
     envelopes: NonNullableArray<Envelope>;
-    buildings: Array<Building>;
     roadBoarders: NonNullableArray<Segment>;
+    buildings: Array<Building>;
     trees: NonNullableArray<Tree>;
     buildingWidth: number;
     spacing: number;
@@ -32,6 +32,8 @@ export class World {
         this.buildingWidth = buildingWidth,
         this.spacing = spacing;
         this.buildingMinLenght = buildMinLength;
+        this.buildings = [];
+        this.trees = [];
         this.generate();
     };
 
@@ -53,11 +55,11 @@ export class World {
     {
         const points = [
             ...this.roadBoarders.map(( s ) => [s.p1, s.p2] ).flat(),
-            ...this.buildings.map(( b ) => b.points ).flat()
+            //...this.buildings.map(( b ) => b.points ).flat()
         ];
 
         const illegalPolys = [
-            ...this.buildings.map(( b ) =>  b.base ),
+            //...this.buildings.map(( b ) =>  b.base ),
             ...this.envelopes.map(( e ) => e.poly )
         ];
 
@@ -138,8 +140,8 @@ export class World {
         for ( let i = 0; i < guides.length; i++ ) {
             const seg = guides[i];
             if ( seg.lenght() < this.buildingMinLenght ) {
-                guides.splice( i,  1 );//si la longeur du batiment et inferieur a min... alors ca degage
-                i--; //dans ce cas la il faut rester au meme index
+                guides.splice( i,  1 );//si la longeur du batiment et inferieur a min... alors on enlève
+                i--; //dans ce cas là il faut rester au meme index
             };
         };
 
@@ -181,7 +183,7 @@ export class World {
         return ( bases.map(( b ) => new Building( b )));//a partir de la creer des buildings 
     };
 
-    draw( ctx: CanvasRenderingContext2D )
+    draw( ctx: CanvasRenderingContext2D, viewPoint: Point )
     {
         for ( const envelope of this.envelopes ) {
             envelope.draw( ctx, { fill: "#BBB", stroke: "#BBB", lineWidth: 5 });
@@ -200,7 +202,7 @@ export class World {
         };
 
         for ( const tree of this.trees ) {
-            tree.draw( ctx );
+            tree.draw( ctx, viewPoint );
         };
     };
 };

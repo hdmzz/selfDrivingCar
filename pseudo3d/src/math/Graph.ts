@@ -9,6 +9,7 @@ export class Graph {
         for ( const point of this.points ) {
             point.draw( ctx );
         };
+
         for ( const seg of this.segments ) {
             seg.draw( ctx );
         };
@@ -21,8 +22,8 @@ export class Graph {
 
     dispose()
     {
-        this.points.length = 0
-        this.segments.length = 0
+        this.points.length = 0;
+        this.segments.length = 0;
     };
 
     getSegmentWithPoint( point: Point ): Segment[]

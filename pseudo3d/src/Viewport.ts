@@ -11,16 +11,16 @@ interface dragType {
 export class Viewport {
     ctx: CanvasRenderingContext2D;
     canvas: HTMLCanvasElement;
-    zoom: number = 1;
+    zoom: number = 5;
     center: Point;
     offset: Point;
     drag: dragType;
 
     constructor(canvas: HTMLCanvasElement){
-        this.canvas =  canvas;
+        this.canvas = canvas;
         this.ctx = canvas.getContext("2d")!;
-        this.center = new Point(0, 0);  
-        this.offset = scale(this.center, -1);
+        this.center = new Point( canvas.width / 2, canvas.height / 2);
+        this.offset = scale(this.center, 1);
         
         this.drag = {
             start: new Point(0,0),
@@ -34,7 +34,7 @@ export class Viewport {
 
     #addEventListener()
     {
-        this.canvas.addEventListener( "mousewheel", this.#handleMouseWheel.bind( this ));
+        this.canvas.addEventListener( "wheel", this.#handleMouseWheel.bind( this ));
         this.canvas.addEventListener( "mousedown", this.#handleMouseDown.bind( this ));
         this.canvas.addEventListener( "mousemove", this.#handleMouseMove.bind( this ));
         this.canvas.addEventListener( "mouseup", this.#handleMouseUp.bind( this ));
@@ -65,7 +65,7 @@ export class Viewport {
         };
     };
 
-    #handleMouseUp( e: MouseEvent )
+    #handleMouseUp( _e: MouseEvent )
     {
         if (this.drag.active) {
             this.offset = add( this.offset, this.drag.offset );

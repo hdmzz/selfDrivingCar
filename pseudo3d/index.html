@@ -4,19 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Building</title>
-    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" type="" href="./style.css">
   </head>
   <body>
     <h1>Building génération</h1>
-    
-    <div class="navigation">
-      <div class="nav-buttons">
-        <a href="/index.html" class="nav-button">Page principale</a>
-        <a href="/index-car.html" class="nav-button">Voiture Auto-conduisante</a>
-        <a href="/index-graph.html" class="nav-button">Grah Editor</a>
-      </div>
-    </div>
-    
     <div class="current-section">
       <h2>Building génération</h2>
       <canvas id="myCanvas" oncontextmenu="event.preventDefault()"></canvas>
@@ -25,7 +16,6 @@
         <button onclick="dispose()">🗑️</button>
       </div>
     </div>
-    
-    <script type="module" src="./buildings/src/main.ts"></script>
+    <script type="module" src="./src/main.ts"></script>
   </body>
 </html>

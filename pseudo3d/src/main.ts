@@ -4,6 +4,7 @@ import { Envelope } from "./primitives/Envelope";
 import { Point } from "./primitives/Point";
 import { Polygon } from "./primitives/Polygon";
 import { Segment } from "./primitives/Segment"; 
+import { scale } from "./utils/utils";
 import { Viewport } from "./Viewport";
 import { World } from "./World";
 
@@ -37,19 +38,20 @@ animate();
 function animate()
 {
     viewPort.reset();
-    if ( graph.hash() !== oldGraphHash) {
+    if ( graph.hash() !== oldGraphHash ) {
         world.generate();
         oldGraphHash = graph.hash();
     };
-    world.draw(ctx!);
+    const viewPoint = scale( viewPort.getOffset(), -1 );
+    world.draw( ctx!, viewPoint );
     ctx!.globalAlpha = 0.3;
     graphEditor.display();
-    requestAnimationFrame(animate);
-}
+    requestAnimationFrame( animate );
+};
 
 function save()
 {
-    localStorage.setItem("graph", JSON.stringify(graph));
+    localStorage.setItem( "graph", JSON.stringify( graph ));
 };
 
 function dispose()
@@ -57,8 +59,8 @@ function dispose()
     graphEditor.dispose();
 };
 
-(window as any).graph       = graph;
-(window as any).graphEditor = graphEditor;
-(window as any).viewPort    = viewPort;
-(window as any).save        = save;
-(window as any).dispose     = dispose;
+( window as any ).graph       = graph;
+( window as any ).graphEditor = graphEditor;
+( window as any ).viewPort    = viewPort;
+( window as any ).save        = save;
+( window as any ).dispose     = dispose;

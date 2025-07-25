@@ -14,8 +14,6 @@ export class Envelope {
     */
     constructor(skeleton: Segment, width: number, roudness: number = 1)
     {
-        if (skeleton === undefined)
-            return;
         this.skeleton = skeleton;
         this.poly = this.#generatePolygon(width, roudness);
     };

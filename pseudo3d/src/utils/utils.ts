@@ -26,17 +26,17 @@ export function distance( p1: Point, p2: Point )
     return (  Math.hypot( p1.x - p2.x, p1.y - p2.y ));
 };
 
-export function scale( p: Point, scaler: number )
+export function scale( p: Point, scaler: number ): Point
 {
     return new Point( p.x * scaler, p.y * scaler );
 };
 
-export function add( p1: Point, p2: Point )
+export function add( p1: Point, p2: Point ): Point
 {
     return new Point( p1.x + p2.x, p1.y + p2.y );
 };
  
-export function subtract( p1: Point, p2: Point )
+export function subtract( p1: Point, p2: Point ): Point
 {
     return new Point( p1.x - p2.x, p1.y - p2.y );
 };
@@ -46,7 +46,7 @@ export function angle( point: Point )
     return Math.atan2( point.y, point.x );
 }; 
 
-export function translate( loc: Point, angle: number, offset: number )
+export function translate( loc: Point, angle: number, offset: number ): Point
 {
     return new Point(
        loc.x + Math.cos( angle ) * offset,
@@ -78,7 +78,7 @@ export function getIntersection( A: Point, B: Point, C: Point, D: Point ): { x: 
     return ( null );
 };
 
-export function lerp( A: number, B: number, t: number )
+export function lerp( A: number, B: number, t: number ): number
 {
     return ( A + (( B - A ) * t ));
 };
@@ -88,12 +88,12 @@ export function lerp( A: number, B: number, t: number )
  * la norme d'un vecteur est obtenue en multipliant chaque element de p (x, y) par 1/ la magnitude de p (la longeur) 
  * @returns la norme c'est a dire la direction
  */
-export function normalize( p: Point )
+export function normalize( p: Point ): Point
 {
     return ( scale( p, 1 / magnitude( p )));
 };
 
-export function magnitude( p: Point )
+export function magnitude( p: Point ): number
 {
     return ( Math.hypot( p.x, p.y ));//la distance entre les 2points d'un vecteur dimension 1
 };
