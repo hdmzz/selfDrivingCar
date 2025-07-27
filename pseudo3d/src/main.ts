@@ -16,13 +16,13 @@ myCanvas!.height = 600;
 const ctx = myCanvas.getContext("2d");
 
 const points = [
-  new Point(50, 80),
-  new Point(20, 500),
-  new Point(500, 200),
+        new Point(50, 80),
+        new Point(20, 500),
+        new Point(500, 200),
 ]
 
 const segments = [
-  new Segment(points[0], points[1]),
+        new Segment(points[0], points[1]),
 ]
 
 const graphString = localStorage.getItem("graph");
@@ -37,26 +37,26 @@ animate();
 
 function animate()
 {
-    viewPort.reset();
-    if ( graph.hash() !== oldGraphHash ) {
-        world.generate();
-        oldGraphHash = graph.hash();
-    };
-    const viewPoint = scale( viewPort.getOffset(), -1 );
-    world.draw( ctx!, viewPoint );
-    ctx!.globalAlpha = 0.3;
-    graphEditor.display();
-    requestAnimationFrame( animate );
+        viewPort.reset();
+        if ( graph.hash() !== oldGraphHash ) {
+                world.generate();
+                oldGraphHash = graph.hash();
+        };
+        const viewPoint = scale( viewPort.getOffset(), -1 );
+        world.draw( ctx!, viewPoint );
+        ctx!.globalAlpha = 0.3;
+        graphEditor.display();
+        requestAnimationFrame( animate );
 };
 
 function save()
 {
-    localStorage.setItem( "graph", JSON.stringify( graph ));
+        localStorage.setItem( "graph", JSON.stringify( graph ));
 };
 
 function dispose()
 {
-    graphEditor.dispose();
+        graphEditor.dispose();
 };
 
 ( window as any ).graph       = graph;
