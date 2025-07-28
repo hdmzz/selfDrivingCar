@@ -122,8 +122,8 @@ export class World {
 
         #generateBuildings()
         {
+                //les routes sont crées ici a partir des segment du Graph
                 const tmpEnvelopes: NonNullableArray<Envelope> = [];
-
                 for ( const seg of this.graph.segments ) {
                         tmpEnvelopes.push(
                                 new Envelope(
@@ -134,8 +134,9 @@ export class World {
                         );
                 };
 
-                const guides = Polygon.union( tmpEnvelopes.map(( e ) => e.poly ));
 
+                //Les jonctions de routes 
+                const guides = Polygon.union( tmpEnvelopes.map(( e ) => e.poly ));
                 for ( let i = 0; i < guides.length; i++ ) {
                         const seg = guides[i];
                         if ( seg.lenght() < this.buildingMinLenght ) {
@@ -147,9 +148,7 @@ export class World {
                 const supports: NonNullableArray<Segment> = [];
                 for ( const seg of guides ) {
                         const len = seg.lenght();
-                        const buildingCount = Math.floor(
-                                len / ( this.buildingMinLenght + this.spacing )
-                        );
+                        const buildingCount = Math.floor( len / ( this.buildingMinLenght + this.spacing ));
                         
                         if ( buildingCount <= 0 ) continue;
                         
@@ -157,11 +156,12 @@ export class World {
                         const direction = seg.directionVector();
 
                         let q1 = seg.p1;
-                        for ( let i = 0; i < buildingCount; i++ ) {
-                                const q2 = add( q1, scale( direction, buildingLength ));
-                                supports.push( new Segment( q1, q2 ));
-                                
+                        let q2 = add( q1, scale( direction, buildingLength ));
+                        supports.push( new Segment( q1, q2 ));
+                        for ( let i = 2; i < buildingCount; i++ ) {
                                 q1 = add( q2, scale( direction, this.spacing ));
+                                q2 = add( q1, scale( direction, buildingLength ));
+                                supports.push( new Segment( q1, q2 ));
                         };
                 };
 
@@ -170,11 +170,12 @@ export class World {
                         bases.push( new Envelope( seg, this.buildingWidth ).poly );
                 };
 
+                let eps = 0.001;
                 for ( let i = 0; i < bases.length; i++ ) {
                         for ( let j = i + 1; j < bases.length; j++ ) {
-                                if (bases[i].intersectsPolygon( bases[j] )) {
-                                bases.splice( j, 1 );
-                                j--;
+                                if ( bases[i].intersectsPolygon( bases[j] ) || bases[i].distanceToPoly( bases[j] ) < this.spacing - eps ) {
+                                        bases.splice( j, 1 );
+                                        j--;
                                 };
                         };
                 };

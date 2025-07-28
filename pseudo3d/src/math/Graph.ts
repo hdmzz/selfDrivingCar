@@ -97,7 +97,7 @@ export class Graph {
                 return this.removeSegment( segToDel );
         }
 
-        static load(info: {points: Point[], segments: Segment[]})
+        static load(info: { points: Point[], segments: Segment[] })
         {
                 const points = info.points.map(( p ) => new Point( p.x, p.y ));
                 const segments = info.segments.map((s) => new Segment(

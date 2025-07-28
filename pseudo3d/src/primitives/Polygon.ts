@@ -44,15 +44,21 @@ export class Polygon {
         return ( false );
     };
 
+    /**
+     * Cette fonctionverifie si les polygons se chevauchent si cest le cas, supprime les parties interieure du polygon resultant
+     * et ne garde que les 'exterieurs'
+     * @param polys 
+     * @returns 
+     */
     static union( polys: Polygon[] )
     {
         Polygon.multiBreak( polys );
         const keptSegments: Segment[] = [];
 
-        for (  let i = 0; i < polys.length; i++  ) {
-            for (  const seg of polys[i].segments  ) {
+        for ( let i = 0; i < polys.length; i++ ) {
+            for ( const seg of polys[i].segments ) {
                 let keep = true;
-                for (  let j = 0; j < polys.length; j++  ) {
+                for ( let j = 0; j < polys.length; j++ ) {
                     if ( i != j ) {
                         if ( polys[j].containsSegment( seg )) {
                             keep = false;

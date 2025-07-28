@@ -1,8 +1,6 @@
 import { GraphEditor } from "./GraphEditor";
 import { Graph } from "./math/Graph";
-import { Envelope } from "./primitives/Envelope";
 import { Point } from "./primitives/Point";
-import { Polygon } from "./primitives/Polygon";
 import { Segment } from "./primitives/Segment"; 
 import { scale } from "./utils/utils";
 import { Viewport } from "./Viewport";

@@ -107,3 +107,12 @@ export function lerp2D( p1: Point, p2: Point, t: number ): Point
 {
         return new Point( lerp( p1.x, p2.x, t ), lerp( p1.y, p2.y, t ));
 };
+
+
+export function getFake3DPoints( point: Point, viewPoint: Point, height: number ): Point
+{
+        const dir = normalize(  subtract( point, viewPoint ));
+        const dist = distance( point, viewPoint );
+        const scaler = Math.atan( dist / 300 ) / Math.PI / 2;
+        return add( point, scale( dir, height * scaler ));
+};
